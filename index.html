@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Haven | Enterprise Real Estate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- ENTERPRISE THEME (UNCHANGED) --- */
+        :root {
+            --primary: #0B1120; /* Darker Navy */
+            --accent: #C5A059; /* Muted Gold */
+            --bg: #F8F9FC;
+            --white: #ffffff;
+            --text: #334155;
+            --success: #059669;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            background: rgba(255, 255, 255, 0.98); padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .logo { font-size: 22px; font-weight: 900; color: var(--primary); letter-spacing: -1px; }
+        .logo span { color: var(--accent); }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(rgba(11, 17, 32, 0.8), rgba(11, 17, 32, 0.6)), url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000');
+            background-size: cover; background-position: center; height: 500px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: white; padding: 20px;
+        }
+        .hero h1 { font-size: 40px; margin-bottom: 15px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .stat-bar { display: flex; gap: 30px; margin-top: 30px; }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 24px; font-weight: bold; color: var(--accent); display: block; }
+        .stat-label { font-size: 12px; opacity: 0.8; }
+
+        /* --- FILTERS --- */
+        .filter-bar {
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;
+            margin-top: -30px; padding: 0 20px; position: relative; z-index: 10;
+        }
+        .filter-btn {
+            background: white; border: none; padding: 15px 30px; border-radius: 8px;
+            font-weight: 700; color: var(--text); cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .filter-btn.active { background: var(--primary); color: white; transform: translateY(-5px); }
+        .filter-btn i { color: var(--accent); }
+
+        /* --- GRID --- */
+        .container { padding: 50px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-header { display: flex; justify-content: space-between; align-items: end; margin-bottom: 30px; }
+        .section-title { color: var(--primary); font-size: 28px; font-weight: 800; margin: 0; }
+        .section-subtitle { color: #64748b; margin-top: 5px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+
+        .card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.3s; cursor: pointer;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px rgba(0,0,0,0.1); }
+        
+        .card-img { height: 240px; width: 100%; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .badge { 
+            position: absolute; top: 15px; left: 15px; padding: 6px 12px; 
+            border-radius: 4px; font-size: 11px; font-weight: bold; color: white; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .badge.sale { background: var(--primary); }
+        .badge.rent { background: #3b82f6; }
+        .badge.land { background: #10b981; }
+
+        .price { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .location { font-size: 13px; color: #64748b; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        
+        /* --- CALCULATOR --- */
+        .calc-section { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); margin-top: 50px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--text); }
+        .form-control { width: 100%; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 16px; background: #f8fafc; }
+        .calc-result { background: var(--primary); color: white; padding: 30px; border-radius: 15px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .monthly-val { font-size: 36px; font-weight: 800; color: var(--accent); margin: 10px 0; }
+
+        /* --- MAP & CONTACT --- */
+        .map-section { height: 400px; background: #ddd; border-radius: 20px; margin-top: 50px; overflow: hidden; position: relative; }
+        .map-overlay {
+            position: absolute; top: 20px; left: 20px; background: white; padding: 20px;
+            border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 300px;
+        }
+
+        /* --- PARTNERS --- */
+        .partners { display: flex; justify-content: center; gap: 40px; margin: 60px 0; opacity: 0.6; flex-wrap: wrap; }
+        .partner-logo { font-size: 24px; font-weight: 900; color: #cbd5e1; display: flex; align-items: center; gap: 10px; }
+
+        /* --- TEAM --- */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 30px; }
+        .team-card { background: white; padding: 30px; text-align: center; border-radius: 15px; border: 1px solid #f1f5f9; }
+        .team-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--accent); }
+        .verified { color: #3b82f6; font-size: 14px; margin-left: 5px; }
+
+        /* --- MODAL --- */
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; display:none; justify-content:center; align-items:center; }
+        .modal-box { background:white; width:90%; max-width:500px; border-radius:15px; overflow:hidden; animation: slideUp 0.3s; }
+        @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1}}
+
+        /* --- WHATSAPP --- */
+        .whatsapp { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; font-size: 32px; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 500; text-decoration: none; }
+
+        footer { background: var(--primary); color: white; padding: 60px 5% 20px; margin-top: 80px; }
+        .admin-link { color: rgba(255,255,255,0.2); text-decoration: none; font-size: 12px; cursor: pointer; }
+
+        /* --- NOTIFICATION ANIMATION --- */
+        @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">ROYAL<span>HAVEN</span></div>
+        <div>
+            <span style="font-size: 12px; color: #64748b; margin-right: 15px;"><i class="fas fa-phone"></i> +234 903 837 8355</span>
+            <span style="font-size: 12px; color: #64748b;"><i class="fas fa-envelope"></i> info@royalhaven.ng</span>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Premium Nigerian Real Estate</h1>
+        <p>The #1 Trusted Platform for Land, Homes, and Investments.</p>
+        <div class="stat-bar">
+            <div class="stat-item"><span class="stat-num">₦500M+</span><span class="stat-label">Transactions</span></div>
+            <div class="stat-item"><span class="stat-num">120+</span><span class="stat-label">Properties Sold</span></div>
+            <div class="stat-item"><span class="stat-num">4.9/5</span><span class="stat-label">Client Rating</span></div>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="loadCategory('sale')"><i class="fas fa-home"></i> Buy House</button>
+        <button class="filter-btn" onclick="loadCategory('rent')"><i class="fas fa-key"></i> For Rent</button>
+        <button class="filter-btn" onclick="loadCategory('land')"><i class="fas fa-layer-group"></i> Buy Land</button>
+    </div>
+
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title" id="grid-title">Luxury Homes for Sale</h2>
+                <div class="section-subtitle">Showing 20 Premium Listings</div>
+            </div>
+            <button style="background:none; border:1px solid #cbd5e1; padding:8px 15px; border-radius:5px; cursor:pointer;" onclick="alert('PDF Brochure Downloading...')"><i class="fas fa-download"></i> Download Catalogue</button>
+        </div>
+        
+        <div class="grid" id="main-grid">
+            </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Mortgage Estimator</h2>
+        <div class="calc-section">
+            <div class="calc-grid">
+                <div>
+                    <div class="form-group">
+                        <label>Property Price (₦)</label>
+                        <input type="number" class="form-control" id="calc-price" value="50000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Down Payment (₦)</label>
+                        <input type="number" class="form-control" id="calc-down" value="10000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Interest Rate (%)</label>
+                        <input type="number" class="form-control" id="calc-rate" value="15">
+                    </div>
+                    <button onclick="calculateMortgage()" style="width:100%; background:var(--primary); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Calculate Payment</button>
+                </div>
+                <div class="calc-result">
+                    <div style="opacity:0.8; font-size:14px;">Estimated Monthly Payment</div>
+                    <div class="monthly-val" id="calc-output">₦0.00</div>
+                    <div style="font-size:12px; margin-top:10px;">*Based on 10-year tenor. Terms apply.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="partners">
+            <div class="partner-logo"><i class="fas fa-university"></i> GTBank</div>
+            <div class="partner-logo"><i class="fas fa-building"></i> DANGOTE</div>
+            <div class="partner-logo"><i class="fas fa-landmark"></i> ZENITH</div>
+            <div class="partner-logo"><i class="fas fa-hard-hat"></i> JULIUS BERGER</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Visit Our Headquarters</h2>
+        <div class="map-section">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.668798150495!2d3.4255535741695275!3d6.436611324165449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf53285e25281%3A0x6b403848b646d62!2sVictoria%20Island%2C%20Lagos!5e0!3m2!1sen!2sng!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="map-overlay">
+                <h3>Royal Haven HQ</h3>
+                <p>105 Ozumba Mbadiwe Ave,<br>Victoria Island, Lagos.</p>
+                <div style="margin-top:10px; font-weight:bold; color:var(--success);">● Open Now</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title" style="text-align:center;">Executive Management</h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="team-img">
+                <h3 style="margin:0;">HENRY ABUSI BLUE-JACK <i class="fas fa-check-circle verified"></i></h3>
+                <div style="color:var(--accent); font-size:12px; font-weight:bold; margin-top:5px;">CEO / PRINCIPAL CONSULTANT</div>
+            </div>
+            <div class="team-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" class="team-img">
+                <h3 style="margin:0;">BLUE-JACK H. SIMINIALAYI <i class="fas fa-check-circle verified"></i></h3>
+                <div style="color:var(--accent); font-size:12px; font-weight:bold; margin-top:5px;">LEAD ENGINEER & TECH</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="prop-modal">
+        <div class="modal-box">
+            <img src="" id="m-img" style="width:100%; height:200px; object-fit:cover;">
+            <div style="padding:25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 id="m-price" style="color:var(--primary); margin:0;"></h2>
+                    <span id="m-badge" style="background:var(--accent); color:white; padding:4px 8px; border-radius:4px; font-size:10px;"></span>
+                </div>
+                <h3 id="m-title" style="margin-top:10px;"></h3>
+                <p id="m-desc" style="color:#64748b; font-size:14px; line-height:1.5;"></p>
+                <button onclick="contactAgent()" style="width:100%; background:var(--success); color:white; padding:15px; border:none; border-radius:8px; font-weight:bold; font-size:16px; margin-top:15px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Book Inspection</button>
+                <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#94a3b8; padding:10px; margin-top:5px; cursor:pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/2349038378355" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+
+    <footer>
+        <div style="text-align:center;">
+            <h3>ROYAL HAVEN PROPERTIES</h3>
+            <p style="opacity:0.7;">RC: 194852 • Licensed Real Estate Developers</p>
+            <div style="margin-top:30px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+                <span class="admin-link" onclick="adminLogin()"><i class="fas fa-lock"></i> Staff Login</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ENGINE: 60 PROPERTIES ---
+        const images = {
+            sale: [
+                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
+                "https://images.unsplash.com/photo-1600596542815-e32c2159f828?w=800",
+                "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+                "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800"
+            ],
+            rent: [
+                "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800",
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+                "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
+                "https://images.unsplash.com/photo-1484154218962-a1c002085d2f?w=800",
+                "https://images.unsplash.com/photo-1502005229766-52838abd80f0?w=800"
+            ],
+            land: [
+                "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+                "https://images.unsplash.com/photo-1516156008625-3a9d60da7057?w=800",
+                "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800",
+                "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
+                "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800"
+            ]
+        };
+
+        const locations = ["Lekki Phase 1", "Victoria Island", "Ikoyi", "Banana Island", "Maitama Abuja", "Guzape Abuja", "Ikeja GRA", "Magodo"];
+
+        // GENERATOR FUNCTIONS (NOW WITH EXPERT TITLES)
+        function generateData(type, count) {
+            let arr = [];
+            for (let i = 0; i < count; i++) {
+                let img = images[type][i % 5];
+                let loc = locations[i % locations.length];
+                let price, title, desc, badge;
+
+                if (type === 'sale') {
+                    price = "₦" + (80 + i * 15) + ",000,000";
+                    title = "Royal Luxury " + (i % 2 === 0 ? "Duplex" : "Villa");
+                    badge = "For Sale";
+                    desc = "5 Bedroom fully detached duplex with cinema, pool, and automation.";
+                } else if (type === 'rent') {
+                    price = "₦" + (3 + i) + ",000,000 / yr";
+                    title = "Serviced " + (i % 2 === 0 ? "Apartment" : "Terrace");
+                    badge = "To Let";
+                    desc = "3 Bedroom luxury flat with 24/7 power and uniformed security.";
+                } else {
+                    // --- NEW FEATURE 1: LEGAL TITLES ---
+                    price = "₦" + (15 + i * 5) + ",000,000";
+                    title = "Prime " + (i % 2 === 0 ? "Estate Plot" : "Commercial Land");
+                    
+                    const titles = ["C of O", "Governor's Consent", "Gazette", "Excision", "Freehold"];
+                    const randomTitle = titles[i % titles.length];
+                    
+                    badge = randomTitle; // Badge now shows title
+                    desc = `600sqm dry land with <b>${randomTitle}</b>. Perimeter fencing done. Instant allocation.`;
+                }
+
+                arr.push({ type, img, price, title, loc, badge, desc });
+            }
+            return arr;
+        }
+
+        // Create 20 of each
+        const listings = {
+            sale: generateData('sale', 20),
+            rent: generateData('rent', 20),
+            land: generateData('land', 20)
+        };
+
+        // --- RENDER FUNCTION ---
+        function loadCategory(cat) {
+            const grid = document.getElementById('main-grid');
+            const title = document.getElementById('grid-title');
+            
+            // Update Buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update Title
+            title.innerText = cat === 'sale' ? "Homes for Sale" : cat === 'rent' ? "Properties for Rent" : "Land Investments";
+
+            // Inject HTML
+            grid.innerHTML = listings[cat].map((item, index) => `
+                <div class="card" onclick="openModal('${cat}', ${index})">
+                    <div style="position:relative;">
+                        <span class="badge ${cat}">${item.badge}</span>
+                        <img src="${item.img}" class="card-img" alt="${item.title}">
+                    </div>
+                    <div class="card-body">
+                        <div class="price">${item.price}</div>
+                        <div style="font-weight:700; font-size:16px; margin-bottom:5px;">${item.title}</div>
+                        <div class="location"><i class="fas fa-map-marker-alt"></i> ${item.loc}</div>
+                        <div style="font-size:12px; color:#94a3b8; border-top:1px solid #f1f5f9; padding-top:10px;">
+                            ${cat === 'land' ? '<i class="fas fa-ruler-combined"></i> 600sqm • <i class="fas fa-file-contract"></i> Verified' : '<i class="fas fa-bed"></i> 4 Beds • <i class="fas fa-bath"></i> 5 Baths'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- MORTGAGE CALCULATOR ---
+        function calculateMortgage() {
+            let price = parseFloat(document.getElementById('calc-price').value);
+            let down = parseFloat(document.getElementById('calc-down').value);
+            let rate = parseFloat(document.getElementById('calc-rate').value);
+            
+            let principal = price - down;
+            let monthlyRate = rate / 100 / 12;
+            let terms = 120; // 10 years
+            
+            let monthly = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -terms));
+            
+            document.getElementById('calc-output').innerText = "₦" + Math.floor(monthly).toLocaleString();
+        }
+
+        // --- MODAL & ADMIN ---
+        let currentItem = {};
+
+        function openModal(cat, index) {
+            currentItem = listings[cat][index];
+            document.getElementById('m-img').src = currentItem.img;
+            document.getElementById('m-price').innerText = currentItem.price;
+            document.getElementById('m-title').innerText = currentItem.title;
+            document.getElementById('m-desc').innerHTML = currentItem.desc; // Use innerHTML for bold tag
+            document.getElementById('m-badge').innerText = currentItem.badge;
+            document.getElementById('prop-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('prop-modal').style.display = 'none';
+        }
+
+        function contactAgent() {
+            let msg = `Hello, I am interested in ${currentItem.title} priced at ${currentItem.price}.`;
+            window.location.href = `https://wa.me/2349038378355?text=${encodeURIComponent(msg)}`;
+        }
+
+        function adminLogin() {
+            let pass = prompt("ENTER STAFF ACCESS CODE:");
+            if(pass === "admin123") {
+                alert("ACCESS GRANTED.\n\nWELCOME CEO HENRY ABUSI.\n\nTotal Revenue: ₦540,000,000\nPending Deals: 14\nAgent Performance: Excellent");
+            } else {
+                alert("ACCESS DENIED. IP LOGGED.");
+            }
+        }
+
+        // --- NEW FEATURE 2: LIVE NOTIFICATIONS SCRIPT ---
+        const nNames = ["Chinedu", "Ibrahim", "Ade", "Ngozi", "Emeka", "Yakubu", "Tolu"];
+        const nActions = ["just booked an inspection", "just made an offer", "is viewing The Onyx Villa", "just requested a callback"];
+        const nCities = ["Lekki", "Abuja", "Ikoyi", "V.I.", "Ikeja"];
+
+        function showNotification() {
+            const div = document.createElement('div');
+            div.style.position = 'fixed';
+            div.style.bottom = '100px'; 
+            div.style.left = '20px';
+            div.style.background = 'white';
+            div.style.padding = '15px';
+            div.style.borderRadius = '10px';
+            div.style.boxShadow = '0 5px 20px rgba(0,0,0,0.15)';
+            div.style.display = 'flex';
+            div.style.alignItems = 'center';
+            div.style.gap = '10px';
+            div.style.zIndex = '400';
+            div.style.animation = 'slideIn 0.5s ease-out';
+            div.style.maxWidth = '250px';
+            div.style.borderLeft = '4px solid #10b981';
+
+            const rName = nNames[Math.floor(Math.random() * nNames.length)];
+            const rAction = nActions[Math.floor(Math.random() * nActions.length)];
+            const rCity = nCities[Math.floor(Math.random() * nCities.length)];
+
+            div.innerHTML = `
+                <div style="background:#d1fae5; color:#065f46; padding:8px; border-radius:50%; font-size:12px;">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                    <div style="font-size:12px; font-weight:bold; color:#1e293b;">${rName} from ${rCity}</div>
+                    <div style="font-size:11px; color:#64748b;">${rAction}</div>
+                </div>
+            `;
+
+            document.body.appendChild(div);
+
+            setTimeout(() => {
+                div.style.transition = 'opacity 0.5s';
+                div.style.opacity = '0';
+                setTimeout(() => div.remove(), 500);
+            }, 4000);
+        }
+
+        // INITIAL LOAD & TIMERS
+        loadCategory('sale');
+        calculateMortgage();
+        setTimeout(showNotification, 2000); // Start notifications after 2s
+        setInterval(showNotification, 12000); // Repeat every 12s
+
+    </script>
+</body>
+</html>
